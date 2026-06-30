@@ -1,0 +1,580 @@
+/***** 原作者：@橙橙子君 *****/
+
+/*
+  @title        深夜像素样式 · 极简像素白
+  @description  像素风弹幕，采用“俐方体11号”字体
+  @author       橙橙子君
+  @updated      May 19, 2025, 5:44:00 AM UTC+8
+  @version      2.1.0
+  @thumbnail    https://pub-d4d706263dfc409fb4c0991a6f6ba4f1.r2.dev/pixel_dark/cover5.jpg
+*/
+
+/* 引用在线字体 */
+  /* 思源黑体 */
+  @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200;300;400;500;600;700;900&display=swap");
+  /* 俐方体11号 */
+  @import url("https://fontsapi.zeoseven.com/101/main/result.css");
+
+@layer remote-css {
+
+body{ background-color: rgba(0, 0, 0, 0); }
+
+/*** 整体设置 ***/
+.event{
+  --event-font-family: 'Cubic111100R', '俐方体11号', 'Noto Sans SC', var(--fontstack-sans-serif);
+  font-size: var(--size);
+  --size: var(--event-font-size);
+  /* 字重 （字体粗细）*/
+  font-weight: 400 !important;
+  /* 整体阴影 */
+  filter: drop-shadow(calc(var(--1px) * 2) calc(var(--1px) * 2) 0 var(--color-oo));
+}
+
+/** 可调选项 **/
+/* 边框大小调整 */
+.event{
+  --rate: calc(var(--1px) * 2);
+/* 配色方案 */
+  --color-o: #efefef;
+  --color-o1: #dfdfdf;
+  --color-oo: #000;
+  --color-m1: var(--color-n4);
+  --color-n1: #b6b6b6;
+  --color-n2: #ffffff;
+  --color-n3: #ffffff;
+  --color-n4: #c8c2c6;
+}
+
+/** 用户身份变量 **/
+/* 普通用户变量 */
+.guard-level--0{
+  --color-n: var(--color-n1);
+  --weight-n: 600;
+  --name-pre: '##';
+}
+/* 舰长变量 */
+.guard-level--1,
+.guard-level--2,
+.guard-level--3{
+  --color-n: var(--color-n2);
+  --weight-n: 900;
+  --name-pre: '#';
+}
+/* 房管变量 */
+.user-type--mod{
+  --color-n: var(--color-n3);
+  --weight-n: 900;
+  --name-pre: '#';
+}
+/* 主播变量 */
+.user-type--streamer{
+  --color-n: var(--color-n4);
+  --weight-n: 900;
+  --name-pre: '#';
+}
+/** 事件类型变量 **/
+.event--gift{
+  --content: 'gift';
+  --width: calc(var(--size) * 4.1);
+}
+.event--mvp{
+  --content: 'mvp';
+  --width: calc(var(--size) * 3.9);
+}
+.event--red-envelope-start,
+.event--red-envelope-result{
+  --content: 'red envelope';
+  --width: calc(var(--size) * 9.9);
+}
+.event--lottery-start,
+.event--lottery-result{
+  --content: 'lottery';
+  --width: calc(var(--size) * 6.5);
+}
+.event--superchat{
+  --content: 'superchat';
+  --width: calc(var(--size) * 8.1);
+}
+
+
+/*** 弹幕样式 ***/
+.event--message{
+  display: grid;
+  position: relative;
+  margin: calc(var(--size) * 0.5) calc(var(--size) * 0);
+  gap: calc(var(--size) * 0.25);
+  color: var(--color-o) !important;
+  width: fit-content;
+}
+.event--message .meta{
+  margin-right: calc(var(--size) * 1);
+}
+
+.event--message .username::before {
+  content: var(--name-pre);
+  font-size: var(--size)-2;
+  margin-left: 15px; 
+  margin-right: 4px; 
+}
+.event--message .username{
+  color: var(--color-n) !important;
+  font-weight: var(--weight-n);
+}
+
+.event--message .message::before {
+  content: '>>> ';
+  font-size: var(--size)-2;
+  margin-right: 4px; /* 可选：让箭头和文字之间有一点间距 */
+}
+
+
+.event--message .message{
+  display: block;
+  color: var(--color-o) !important;
+  order: -3;
+
+  text-shadow: 
+    0 0 calc(var(--1px) * 8) rgba(0, 0, 0, 0.8),   /* 核心清晰轮廓 */
+    0 0 calc(var(--1px) * 10) rgba(0, 0, 0, 0.5),   /* 中层扩散 */
+    0 0 calc(var(--1px) * 8) rgba(0, 0, 0, 0.3);   /* 外层柔和渐变 */
+}
+.event--message .reply-username{
+  color: var(--color-o);
+  text-decoration: underline var(--color-o);
+}
+.event--message .username::after{
+  content: '';
+  position: relative;
+  bottom: calc(var(--size) * -0.35);
+  right: calc(var(--size) * 0);
+  width: calc(var(--size) * 1.2);
+  height: calc(var(--size) * 1.2);
+  background-image: url(https://s3.bmp.ovh/imgs/2024/10/31/4d14830c0deac91c.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-left:4px;
+
+  display: inline-block; /* 确保 transform 生效 */
+  transform: rotate(180deg);
+
+  display:none;
+}
+
+
+/*** 互动消息、普通消息、普通礼物&红包样式 ***/
+.event--interaction,
+.event--like-click,
+.event--system,
+.event--user-block,
+.event--live-warning,
+.event--live-cutoff,
+.event--room-mute-on,
+.event--room-mute-off,
+.event--room-name-update,
+.event--notice,
+.event--live-start,
+.event--live-end,
+.event--gift.event-show-as--normal.event-size--normal,
+.event--red-envelope-start.event-show-as--normal.event-size--normal{
+  position: relative;
+  margin: calc(var(--size) * 0.5) calc(var(--size) * 1);
+  padding: calc(var(--size) * 0.2) calc(var(--size) * 0);
+  padding-left: calc(var(--size) * 1);
+  color: var(--color-o);
+  background-color: transparent;
+  --event-username-text-0: var(--color-o);
+  --event-username-text-1: var(--color-o);
+  --event-username-text-2: var(--color-o);
+  --event-username-text-3: var(--color-o);
+  --event-like-click-text: var(--color-o);
+  --event-interaction-text-enter: var(--color-o);
+  --event-interaction-text-follow: var(--color-o);
+  --event-interaction-text-share: var(--color-o);
+  --event-interaction-text-follow-special: var(--color-o);
+  --event-interaction-text-follow-mutual: var(--color-o);
+  --event-gift-normal-text-1: var(--color-o);
+  --event-gift-normal-text-2: var(--color-o);
+  --event-gift-normal-text-3: var(--color-o);
+  --event-gift-normal-text-4: var(--color-o);
+  --event-gift-normal-text-5: var(--color-o);
+  --event-gift-normal-text-6: var(--color-o);
+  --event-red-envelope-start-normal-text: var(--color-o);
+  opacity: 1;
+}
+/* 修复对齐 */
+.event--interaction .meta,
+.event--like-click .meta{
+  margin-top: calc(var(--1px) * 3.2);
+}
+/* 通知文本 */
+.event--notice .notice-text,
+.event--notice .notice-highlight{
+  color: var(--color-o) !important;
+}
+/** 添加像素动图 **/
+.event--interaction::before,
+.event--like-click::before,
+.event--system::before,
+.event--user-block::before,
+.event--live-warning::before,
+.event--live-cutoff::before,
+.event--room-mute-on::before,
+.event--room-mute-off::before,
+.event--room-name-update::before,
+.event--notice::before,
+.event--live-start::before,
+.event--live-end::before,
+.event--gift.event-show-as--normal.event-size--normal::before,
+.event--red-envelope-start.event-show-as--normal.event-size--normal::before{
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(var(--size) * -0.5);
+  width: calc(var(--size) * 1.2);
+  height: calc(var(--size) * 1.2);
+  background-image: var(--gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.event--interaction,
+.event--like-click{
+  --gif: url(https://s3.bmp.ovh/imgs/2024/10/31/1df76d1bfeeb01c1.gif);
+}
+.event--gift,
+.event--red-envelope-start,
+.event--notice{
+  --gif: url(https://s3.bmp.ovh/imgs/2024/10/31/c32384082e37dfb4.gif);
+}
+.event--user-block,
+.event--live-warning,
+.event--live-cutoff,
+.event--room-mute-on,
+.event--room-mute-off{
+  --gif: url(https://s3.bmp.ovh/imgs/2024/10/31/8bffa5af30848750.gif);
+}
+.event--system,
+.event--room-name-update,
+.event--live-start,
+.event--live-end{
+  --gif: url(https://s3.bmp.ovh/imgs/2024/10/31/55cda3733cada180.gif);
+}
+
+/*** 付费礼物、红包、天选时刻、SC ***/
+.event--gift.event-show-as--normal.event-size--highlight,
+.event--mvp.event-show-as--normal,
+.event--red-envelope-start.event-show-as--normal.event-size--highlight,
+.event--red-envelope-result,
+.event--lottery-start.event-show-as--normal.event-size--highlight,
+.event--lottery-result,
+.event--superchat.event-show-as--normal{
+  margin: calc(var(--size) * 1.5) calc(var(--size) * 0.5) calc(var(--size) * 1);
+  padding: calc(var(--rate) * 3.5) calc(var(--rate) * 4);
+  font-size: calc(var(--size) + 1px);
+  color: var(--color-o);
+  background-color: transparent !important;
+  border-radius: 0;
+  border: solid calc(var(--size) * 0.2) var(--color-o);
+  min-width: 40%;
+  max-width: 80%;
+  width: fit-content;
+}
+.event--gift.event-show-as--normal.event-size--highlight .username,
+.event--mvp.event-show-as--normal .username,
+.event--red-envelope-start.event-show-as--normal.event-size--highlight .username,
+.event--lottery-start.event-show-as--normal.event-size--highlight .lottery-start-details-requirements b,
+.event--superchat.event-show-as--normal .username{
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(to bottom, var(--color-o), var(--color-o) 29.99%, var(--color-o1) 30%);
+}
+.event--gift.event-show-as--normal.event-size--highlight .price,
+.event--mvp.event-show-as--normal .price,
+.event--red-envelope-start.event-show-as--normal.event-size--highlight .price,
+.event--lottery-start.event-show-as--normal.event-size--highlight .price,
+.event--superchat.event-show-as--normal .price{
+  margin: 0 var(--rate);
+  padding: 0 calc(var(--rate) * 2);
+  color: var(--color-oo);
+  background-image: linear-gradient(to bottom, var(--color-o), var(--color-o) 29.99%, var(--color-o1) 30%);
+}
+.event--gift.event-show-as--normal.event-size--highlight .message,
+.event--mvp.event-show-as--normal .message,
+.event--red-envelope-start.event-show-as--normal.event-size--highlight .message{
+  font-size: calc(var(--size) + 2px);
+  order: -4;
+}
+.event--gift.event-show-as--normal.event-size--highlight::before,
+.event--mvp.event-show-as--normal::before,
+.event--red-envelope-start.event-show-as--normal.event-size--highlight::before,
+.event--red-envelope-result::before,
+.event--lottery-start.event-show-as--normal.event-size--highlight::before,
+.event--lottery-result::before,
+.event--superchat.event-show-as--normal::before{
+  content: var(--content);
+  position: absolute;
+  font-size: var(--size);
+  line-height: 1.5;
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: calc(var(--size) * 0.1);
+  top: calc(var(--size) * -1.5);
+  right: calc(var(--size) * 0.2);
+  width: var(--width);
+  height: calc(var(--size) * 1.2);
+  background-image: url(https://s3.bmp.ovh/imgs/2024/10/31/4d14830c0deac91c.gif);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.event--gift.event-show-as--normal.event-size--normal .username,
+.event--red-envelope-start.event-show-as--normal.event-size--normal .username{
+  margin-right: calc(var(--size) * 0.3);
+}
+.event--gift.event-show-as--normal .message::before{
+  content: '送了';
+  margin-right: calc(var(--size) * 0.2);
+}
+.gift-blind-action{
+  margin: 0 calc(var(--size) * 0.2);
+}
+.event.event-show-as--normal .content{
+  padding-right: 0;
+}
+
+/** 红包、天选时刻补充 **/
+.event .list-item-wrap .avatar-wrap{
+  display: block !important;
+}
+.event .avatar-wrap img{
+  border-radius: 0 !important;
+}
+.event--red-envelope-result,
+.event--lottery-result{
+  color: var(--color-o) !important;
+}
+.event--red-envelope-result .red-envelope-result-list,
+.event--lottery-result .lottery-result-list{
+  margin-top: calc(var(--rate) * 2);
+  gap: calc(var(--size) * 0.4);
+}
+
+
+/** SC补充 **/
+.event--superchat.event-show-as--normal{
+  min-width: 60%;
+  max-width: 90%;
+  width: fit-content;
+}
+.event--superchat.event-show-as--normal .top{
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+.event--superchat.event-show-as--normal .meta{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: calc(var(--size) * 0.3) 0;
+}
+.event--superchat.event-show-as--normal .username-wrap{
+  grid-column: 1 / -1;
+}
+.event--superchat.event-show-as--normal .price{
+  justify-self: start;
+}
+.event--superchat.event-show-as--normal .timestamp-wrap{
+  justify-self: end;
+}
+.event--superchat.event-show-as--normal .message{
+  margin-bottom: calc(var(--rate) * 1);
+  padding: 0;
+  font-size: calc(var(--size) + 2px);
+  line-height: 1.5;
+  color: var(--color-o);
+  background-color: transparent;
+  border-radius: 0;
+  order: -2;
+}
+.message-translation{
+  display: none;
+}
+
+
+/*** 舰长样式 ***/
+.event--toast.event-show-as--normal{
+  background: none;
+  text-align: center;
+  justify-content: center;
+  color: var(--color-o);
+}
+.event--toast.event-show-as--normal .content{
+  justify-items: center;
+}
+.event--toast.event-show-as--normal .username{
+  margin: calc(var(--rate) * -2) calc(var(--size) * 2) calc(var(--size) * 1) calc(var(--size) * 2);
+  padding: calc(var(--rate) * 2.5) calc(var(--rate) * 3);
+  font-size: calc(var(--size) + 2px);
+  /*** border: solid calc(var(--size) * 0.2) var(--color-o); ***/
+  width: fit-content;
+  order: 4;
+}
+.event--toast.event-show-as--normal .message{
+  padding: 0;
+  margin-top: calc(var(--size) * 1);
+  font-size: calc(var(--size) * 1.25);
+  /*** filter: drop-shadow(calc(var(--1px) * 3) calc(var(--1px) * 3) 0 var(--color-m1)); ***/
+  z-index: -2;
+
+  filter: 
+    drop-shadow(0 0 calc(var(--1px) * 2) rgba(255, 255, 255, 0.59))   /* 核心轮廓 */
+    drop-shadow(0 0 calc(var(--1px) * 4) rgba(255, 255, 255, 0.5))   /* 中层扩散 */
+    drop-shadow(0 0 calc(var(--1px) * 6) rgba(255, 255, 255, 0.3));  /* 外层柔和渐变 */
+}
+.event--toast.event-show-as--normal .toast-details-type{
+  font-size: calc(var(--size) * 2);
+}
+.event--toast.event-show-as--normal::after{
+  content: ' ';
+  position: absolute;
+  left: 50%;
+  top: calc(var(--size) * 2.5);
+  transform: translate(-50%, -50%);
+  font-size: calc(var(--size) * 1);
+  z-index: -2;
+  color: var(--color-m1);
+  text-shadow: none;
+  filter: drop-shadow(calc(var(--1px) * 1) calc(var(--1px) * 1) 0 var(--color-o));
+  opacity: 0.75;
+  z-index: -3;
+}
+
+
+/*** 关闭内容 ***/
+.gift-sticky-bar,
+.wealth-medal,
+.fans-medal,
+.guard-badge,
+.mod-badge,
+.streamer-badge,
+.current-rank,
+.user-level,
+.receiver-avatar,
+.reply-avatar,
+.gift-image-wrap,
+.mvp-icon-wrap,
+.red-envelope-start-icon-wrap,
+.red-envelope-start-rewards,
+.event .lottery-start-icon-wrap,
+.avatar-frame,
+.gift-receiver,
+svg.tabler-icon.tabler-icon-thumb-up-filled,
+.lottery-start-details-message,
+.event .avatar-wrap,
+.event--toast.event-show-as--normal .price,
+.event--toast.event-show-as--normal .message :not(.toast-details-type, .toast-details-symbol,.toast-details-figure, .toast-details-unit){
+  display: none;
+}
+
+
+/*** 动画样式 ***/
+.event{
+  animation: up_slow 500ms both;
+}
+@keyframes up_slow{
+  0%, 19.99%{
+    opacity: 0;
+    transform: translateY(calc(var(--1px) * -20));
+  }
+  20%, 59.99%{
+    opacity: 0.5;
+    transform: translateY(calc(var(--1px) * -12));
+  }
+  60%, 99.99%{
+    opacity: 0.8;
+    transform: translateY(calc(var(--1px) * -6));
+  }
+  100%{
+    opacity: 1;
+  }
+}
+.event--toast.event-show-as--normal .message{
+  animation: mem 500ms 700ms both;
+}
+@keyframes mem{
+  0%, 19.99%{
+    opacity: 0;
+    transform: translateY(calc(var(--1px) * 20));
+  }
+  20%, 59.99%{
+    opacity: 0.5;
+    transform: translateY(calc(var(--1px) * 12));
+  }
+  60%, 99.99%{
+    opacity: 0.8;
+    transform: translateY(calc(var(--1px) * 6));
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+
+/** 右对齐效果 **/
+/*  <- 删除前后标记的两行即可生效
+.event,
+.event--message{
+  margin-left: auto !important;
+}
+.event--message .meta{
+  margin-right: 0;
+  justify-content: flex-end;
+}
+.event--message .message{
+  text-align: right;
+}
+.event--interaction,
+.event--like-click,
+.event--system,
+.event--user-block,
+.event--live-warning,
+.event--live-cutoff,
+.event--room-mute-on,
+.event--room-mute-off,
+.event--room-name-update,
+.event--notice,
+.event--live-start,
+.event--live-end,
+.event--gift.event-show-as--normal.event-size--normal,
+.event--red-envelope-start.event-show-as--normal.event-size--normal{
+  text-align: right;
+  padding-left: auto;
+  padding-right: calc(var(--size) * 1);
+}
+.event--interaction::before,
+.event--like-click::before,
+.event--system::before,
+.event--user-block::before,
+.event--live-warning::before,
+.event--live-cutoff::before,
+.event--room-mute-on::before,
+.event--room-mute-off::before,
+.event--room-name-update::before,
+.event--notice::before,
+.event--live-start::before,
+.event--live-end::before,
+.event--gift.event-show-as--normal.event-size--normal::before,
+.event--red-envelope-start.event-show-as--normal.event-size--normal::before{
+  left: auto;
+  right: calc(var(--size) * -0.5);
+  transform: translateY(-50%) rotateY(180deg);
+}
+  删除前后标记的两行即可生效 -> */
+
+/** 用户名置顶显示 **/
+/*  <- 删除前后标记的两行即可生效
+.event .message{
+  order: 2 !important;
+}
+  删除前后标记的两行即可生效 -> */
+
+}
