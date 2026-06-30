@@ -19,9 +19,23 @@
 
 body{ background-color: rgba(0, 0, 0, 0); }
 
+body{
+  max-height: 400px !important;
+  height: 400px !important;
+  overflow: hidden !important; /* 隐藏超出 400px 的旧弹幕 */
+    
+  /* 如果你希望弹幕从底部向上升起，可以开启下面这一行 */
+  /* display: flex; flex-direction: column; justify-content: flex-end; */
+}
+
+
+@font-face{
+  font-family: 'Fusion Pixel 12px';
+  src: url(https://cdn.jsdelivr.net/fontsource/fonts/fusion-pixel-12px-monospaced-tc@latest/latin-400-normal.woff2) format('woff2');
+}
 /*** 整体设置 ***/
 .event{
-  --event-font-family: 'Cubic111100R', '俐方体11号', 'Noto Sans SC', var(--fontstack-sans-serif);
+  --event-font-family: '俐方体11号', 'Fusion Pixel 12px', 'Cubic111100R', 'Noto Sans SC', var(--fontstack-sans-serif);
   font-size: var(--size);
   --size: var(--event-font-size);
   /* 字重 （字体粗细）*/
